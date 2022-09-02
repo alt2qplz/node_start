@@ -1,14 +1,21 @@
-import http from 'http';
-
-const host = '127.0.0.1';
+import express from 'express';
 const port = 8000;
+const app = express();
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('HI!')
-});
+app.all('/hello', (req, res, next) => {
+  console.log('HELLO!');
+  next();
+})
 
-server.listen(port, host, () => {
-  console.log(`server started ${host}:${port}`)
+const cb = (req, res, next) => {
+  console.log('CB');
+  next();
+}
+
+app.get('/hello', [cb, cb, cb, (req, res) => {
+  res.send('Hello!')
+}])
+
+app.listen(port, () => {
+  console.log(`server started on PORT: ${port}`)
 })
