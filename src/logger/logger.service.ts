@@ -8,7 +8,8 @@ export class LoggerService {
       displayInstanceName: false,
       displayLoggerName: false,
       displayFilePath: 'hidden',
-      displayFunctionName: false
+      displayFunctionName: false,
+      dateTimeTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone
     });
   }
 
