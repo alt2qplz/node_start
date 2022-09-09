@@ -5,9 +5,10 @@ import { inject, injectable } from 'inversify';
 import { TYPES } from '../types';
 import { ILogger } from '../logger/logger.interface';
 import 'reflect-metadata';
+import { IUserController } from './user.controller.interface';
 
 @injectable()
-export class UsersController extends BaseController {
+export class UsersController extends BaseController implements IUserController{
   constructor(
     @inject(TYPES.LoggerService) private  loggerService: ILogger
   ) {
@@ -19,12 +20,12 @@ export class UsersController extends BaseController {
     ]);
   }
 
-  login(req: Request, res: Response, next: NextFunction) {
+  login(req: Request, res: Response, next: NextFunction): void {
     // this.ok<{message: string}>(res, { message: 'login' });
     next(new HTTPError(401, 'User not found'));
   }
 
-  register(req: Request, res: Response, next: NextFunction) {
+  register(req: Request, res: Response, next: NextFunction): void {
     this.ok<{message: string}>(res, { message: 'register' });
   }
 }

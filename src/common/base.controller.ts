@@ -15,7 +15,7 @@ export abstract class BaseController {
     this._router = Router();
   }
 
-  get router() {
+  get router(): Router {
     return this._router;
   }
 
@@ -31,7 +31,7 @@ export abstract class BaseController {
     return this.send<T>(res, 200, message);
   }
 
-  protected bindRoutes(routes: IControllerRoute[]) {
+  protected bindRoutes(routes: IControllerRoute[]): void {
     for (const route of routes) {
       this.logger.log(`[${route.method.toUpperCase()}] ${route.path}`);
       const handler = route.func.bind(this);
