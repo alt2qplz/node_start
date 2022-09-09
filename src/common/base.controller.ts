@@ -1,17 +1,18 @@
-import { LoggerService } from '../logger/logger.service';
 import { Router, Response } from 'express';
 import { IControllerRoute } from './route.interface';
+import { ILogger } from '../logger/logger.interface';
+import { injectable } from 'inversify';
+import 'reflect-metadata';
 
+
+@injectable()
 export abstract class BaseController {
   private readonly _router: Router;
-  readonly route: string;
+  private logger: ILogger;
 
-  protected constructor(
-    private logger: LoggerService,
-    route: string
-  ) {
+  constructor(logger: ILogger) {
+    this.logger = logger;
     this._router = Router();
-    this.route = route;
   }
 
   get router() {
@@ -32,7 +33,7 @@ export abstract class BaseController {
 
   protected bindRoutes(routes: IControllerRoute[]) {
     for (const route of routes) {
-      this.logger.log(`[${route.method.toUpperCase()}] ${this.route}${route.path}`);
+      this.logger.log(`[${route.method.toUpperCase()}] ${route.path}`);
       const handler = route.func.bind(this);
       this._router[route.method](route.path, handler);
     }
