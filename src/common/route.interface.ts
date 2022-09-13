@@ -6,3 +6,5 @@ export interface IControllerRoute {
 
   func(req: Request, res: Response, next: NextFunction): void;
 }
+
+export type ExpressReturnType = Response<any, Record<string, any>>;

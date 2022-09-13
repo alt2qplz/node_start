@@ -19,7 +19,7 @@ export class App {
     @inject(TYPES.UserController) private userController: UsersController
   ) {
     this.app = express();
-    this.port = 8000;
+    this.port = 4000;
   }
 
   useRoutes(): void {
