@@ -1,11 +1,12 @@
 import { BaseController } from '../common/base.controller';
 import { Request, Response, NextFunction } from 'express';
-import { HTTPError } from '../errors/http-error.class';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../types';
 import { ILogger } from '../logger/logger.interface';
 import 'reflect-metadata';
 import { IUserController } from './user.controller.interface';
+import { UserLoginDto } from './dto/user-login.dto';
+import { UserRegisterDto } from './dto/user-register.dto';
 
 @injectable()
 export class UsersController extends BaseController implements IUserController{
@@ -20,13 +21,13 @@ export class UsersController extends BaseController implements IUserController{
     ]);
   }
 
-  login(req: Request, res: Response, next: NextFunction): void {
-    console.log('login!');
-    // this.ok<{message: string}>(res, { message: 'login' });
-    next(new HTTPError(401, 'User not found'));
+  login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction): void {
+    console.log(req.body);
+    // next(new HTTPError(401, 'User not found'));
+    this.ok<{message: string}>(res, { message: 'login' });
   }
 
-  register(req: Request, res: Response, next: NextFunction): void {
+  register(req: Request<{}, {}, UserRegisterDto>, res: Response, next: NextFunction): void {
     this.ok<{message: string}>(res, { message: 'register' });
   }
 }
