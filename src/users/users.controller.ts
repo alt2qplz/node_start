@@ -21,7 +21,7 @@ export class UsersController extends BaseController implements IUserController{
   }
 
   login(req: Request, res: Response, next: NextFunction): void {
-    console.log('1234');
+    console.log('login!');
     // this.ok<{message: string}>(res, { message: 'login' });
     next(new HTTPError(401, 'User not found'));
   }
