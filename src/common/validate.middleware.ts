@@ -1,6 +1,6 @@
 import { IMiddleware } from './middleware.interface';
 import { NextFunction, Request, Response } from 'express';
-import { ClassConstructor, plainToClass } from 'class-transformer';
+import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 
 export class ValidateMiddleware implements IMiddleware {
@@ -10,7 +10,7 @@ export class ValidateMiddleware implements IMiddleware {
   }
 
   execute({ body }: Request, res: Response, next: NextFunction): void {
-    const instance = plainToClass(this.classToValidate, body); // deprecated
+    const instance = plainToInstance(this.classToValidate, body); // plainToClass deprecated
     validate(instance).then(errs => {
       if (errs.length) res.status(422).send(errs);
       else next();
