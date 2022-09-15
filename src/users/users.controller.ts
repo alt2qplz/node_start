@@ -7,13 +7,16 @@ import 'reflect-metadata';
 import { IUserController } from './user.controller.interface';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserRegisterDto } from './dto/user-register.dto';
+import { IUserService } from './user.service.interface';
+import { HTTPError } from '../errors/http-error.class';
 
 @injectable()
 export class UsersController extends BaseController implements IUserController{
   constructor(
-    @inject(TYPES.LoggerService) private  loggerService: ILogger
+    @inject(TYPES.LoggerService) private _loggerService: ILogger,
+    @inject(TYPES.UserService) private _userService: IUserService
   ) {
-    super(loggerService);
+    super(_loggerService);
 
     this.bindRoutes([
       { path: '/login', method: 'post', func: this.login },
@@ -27,7 +30,13 @@ export class UsersController extends BaseController implements IUserController{
     this.ok<{message: string}>(res, { message: 'login' });
   }
 
-  register(req: Request<{}, {}, UserRegisterDto>, res: Response, next: NextFunction): void {
-    this.ok<{message: string}>(res, { message: 'register' });
+  async register(
+    { body }: Request<{}, {}, UserRegisterDto>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const result = await this._userService.createUser(body);
+    if (!result) return next(new HTTPError(422, 'Такой пользователь уже существует'));
+    this.ok(res, { email: result.email, name: result.name });
   }
 }
